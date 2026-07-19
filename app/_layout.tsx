@@ -8,19 +8,21 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <PokemonAppProvider>
-        <StatusBar style="dark" />
+        <StatusBar style="light" />
         <Stack
           screenOptions={{
             headerTitleAlign: "center",
             headerShadowVisible: false,
-            headerStyle: { backgroundColor: "#F7F8FC" },
-            contentStyle: { backgroundColor: "#F7F8FC" },
+            headerStyle: { backgroundColor: "#D62828" },
+            headerTintColor: "#FFFFFF",
+            headerTitleStyle: { fontWeight: "900" },
+            contentStyle: { backgroundColor: "#F5F2E9" },
           }}
         >
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen
             name="pokemon/[name]"
-            options={{ title: "Pokémon Details" }}
+            options={{ title: "Pokémon Data" }}
           />
         </Stack>
       </PokemonAppProvider>

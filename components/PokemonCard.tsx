@@ -30,7 +30,7 @@ export default function PokemonCard({
   onTypePress,
   onToggleTeam,
 }: PokemonCardProps) {
-  const backgroundColor = TYPE_COLORS[pokemon.types[0]] ?? "#7B7F8C";
+  const primaryColor = TYPE_COLORS[pokemon.types[0]] ?? "#7B7F8C";
 
   return (
     <View style={styles.card}>
@@ -43,21 +43,47 @@ export default function PokemonCard({
           pressed && styles.pressed,
         ]}
       >
-        <View
-          style={[
-            styles.imageArea,
-            { backgroundColor: `${backgroundColor}22` },
-          ]}
-        >
-          <Text style={styles.number}>
-            #{String(pokemon.id).padStart(3, "0")}
-          </Text>
+        <View style={[styles.imageArea, { backgroundColor: primaryColor }]}>
+          <View style={styles.ballOutline}>
+            <View style={styles.ballLine} />
+            <View style={styles.ballCenter} />
+          </View>
+
+          <View style={styles.numberPill}>
+            <Text style={styles.number}>
+              #{String(pokemon.id).padStart(3, "0")}
+            </Text>
+          </View>
+
           <Image source={{ uri: pokemon.image }} style={styles.image} />
         </View>
 
-        <Text numberOfLines={1} style={styles.name}>
-          {formatPokemonName(pokemon.name)}
-        </Text>
+        <View style={styles.infoArea}>
+          <Text numberOfLines={1} style={styles.name}>
+            {formatPokemonName(pokemon.name)}
+          </Text>
+
+          <View style={styles.typeRow}>
+            {pokemon.types.map((type) => (
+              <Pressable
+                key={type}
+                onPress={() => onTypePress(type)}
+                style={[
+                  styles.typeBadge,
+                  { borderColor: TYPE_COLORS[type] ?? "#7B7F8C" },
+                ]}
+              >
+                <View
+                  style={[
+                    styles.typeDot,
+                    { backgroundColor: TYPE_COLORS[type] ?? "#7B7F8C" },
+                  ]}
+                />
+                <Text style={styles.typeText}>{type}</Text>
+              </Pressable>
+            ))}
+          </View>
+        </View>
       </Pressable>
 
       <Pressable
@@ -71,25 +97,10 @@ export default function PokemonCard({
       >
         <Ionicons
           name={favorite ? "heart" : "heart-outline"}
-          size={22}
-          color={favorite ? "#E3350D" : "#757985"}
+          size={21}
+          color={favorite ? "#D62828" : "#6A6D77"}
         />
       </Pressable>
-
-      <View style={styles.typeRow}>
-        {pokemon.types.map((type) => (
-          <Pressable
-            key={type}
-            onPress={() => onTypePress(type)}
-            style={[
-              styles.typeBadge,
-              { backgroundColor: TYPE_COLORS[type] ?? "#7B7F8C" },
-            ]}
-          >
-            <Text style={styles.typeText}>{type}</Text>
-          </Pressable>
-        ))}
-      </View>
 
       {onToggleTeam && (
         <Pressable
@@ -100,7 +111,7 @@ export default function PokemonCard({
           ]}
         >
           <Ionicons
-            name={inTeam ? "remove-outline" : "add-outline"}
+            name={inTeam ? "remove-circle-outline" : "add-circle-outline"}
             size={18}
             color="#FFFFFF"
           />
@@ -119,89 +130,138 @@ const styles = StyleSheet.create({
     minWidth: 0,
     marginBottom: 12,
     overflow: "hidden",
-    borderRadius: 20,
+    borderRadius: 21,
+    borderWidth: 1,
+    borderColor: "#E5E0D4",
     backgroundColor: "#FFFFFF",
-    shadowColor: "#000000",
-    shadowOpacity: 0.05,
-    shadowRadius: 12,
+    shadowColor: "#372525",
+    shadowOpacity: 0.09,
+    shadowRadius: 10,
     shadowOffset: { width: 0, height: 5 },
-    elevation: 2,
+    elevation: 3,
   },
   mainPressable: {
-    padding: 10,
-    paddingBottom: 4,
+    flex: 1,
   },
   pressed: {
-    opacity: 0.75,
+    opacity: 0.8,
   },
   imageArea: {
-    minHeight: 125,
-    borderRadius: 16,
+    height: 132,
+    overflow: "hidden",
     alignItems: "center",
     justifyContent: "center",
   },
-  number: {
+  ballOutline: {
     position: "absolute",
-    top: 9,
+    right: -23,
+    bottom: -37,
+    width: 130,
+    height: 130,
+    borderRadius: 65,
+    borderWidth: 7,
+    borderColor: "#FFFFFF30",
+  },
+  ballLine: {
+    position: "absolute",
+    top: 55,
+    left: -5,
+    width: 140,
+    height: 10,
+    backgroundColor: "#FFFFFF30",
+  },
+  ballCenter: {
+    position: "absolute",
+    top: 40,
+    left: 43,
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    borderWidth: 7,
+    borderColor: "#FFFFFF30",
+  },
+  numberPill: {
+    position: "absolute",
     left: 10,
-    color: "#777B87",
-    fontSize: 11,
+    top: 10,
+    zIndex: 2,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 999,
+    backgroundColor: "#1E2027AA",
+  },
+  number: {
+    color: "#FFFFFF",
+    fontSize: 10,
     fontWeight: "900",
   },
   image: {
-    width: 115,
-    height: 115,
+    width: 118,
+    height: 118,
+  },
+  infoArea: {
+    minHeight: 83,
+    padding: 11,
   },
   name: {
-    marginTop: 9,
-    color: "#20222A",
+    paddingRight: 29,
+    color: "#252832",
     fontSize: 16,
     fontWeight: "900",
   },
   favoriteButton: {
     position: "absolute",
-    top: 11,
-    right: 11,
-    zIndex: 2,
-    width: 34,
-    height: 34,
+    right: 9,
+    top: 143,
+    zIndex: 3,
+    width: 33,
+    height: 33,
     borderRadius: 17,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#FFFFFFE6",
+    backgroundColor: "#F6F3EB",
   },
   typeRow: {
-    paddingHorizontal: 10,
-    paddingBottom: 12,
+    marginTop: 9,
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 5,
   },
   typeBadge: {
-    paddingVertical: 5,
-    paddingHorizontal: 9,
+    paddingVertical: 4,
+    paddingHorizontal: 7,
     borderRadius: 999,
+    borderWidth: 1,
+    backgroundColor: "#FFFFFF",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  typeDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 4,
   },
   typeText: {
-    color: "#FFFFFF",
-    fontSize: 10,
-    fontWeight: "800",
+    color: "#555963",
+    fontSize: 9,
+    fontWeight: "900",
     textTransform: "capitalize",
   },
   teamAction: {
     paddingVertical: 10,
-    backgroundColor: "#E3350D",
+    backgroundColor: "#D62828",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 5,
+    gap: 6,
   },
   removeTeamAction: {
-    backgroundColor: "#484C58",
+    backgroundColor: "#252832",
   },
   teamActionText: {
     color: "#FFFFFF",
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: "900",
   },
 });

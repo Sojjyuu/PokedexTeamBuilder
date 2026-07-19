@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, StyleSheet, Text } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { TYPE_COLORS } from "../constants/typeColors";
 
@@ -26,6 +26,12 @@ export default function TypeFilter({
           selectedType === null && styles.allChipSelected,
         ]}
       >
+        <View
+          style={[
+            styles.dot,
+            { backgroundColor: selectedType === null ? "#FFFFFF" : "#252832" },
+          ]}
+        />
         <Text
           style={[
             styles.chipText,
@@ -38,6 +44,7 @@ export default function TypeFilter({
 
       {types.map((type) => {
         const selected = selectedType === type;
+        const color = TYPE_COLORS[type] ?? "#7B7F8C";
 
         return (
           <Pressable
@@ -46,11 +53,19 @@ export default function TypeFilter({
             style={[
               styles.chip,
               selected && {
-                backgroundColor: TYPE_COLORS[type] ?? "#7B7F8C",
-                borderColor: TYPE_COLORS[type] ?? "#7B7F8C",
+                backgroundColor: color,
+                borderColor: color,
               },
             ]}
           >
+            <View
+              style={[
+                styles.dot,
+                {
+                  backgroundColor: selected ? "#FFFFFF" : color,
+                },
+              ]}
+            />
             <Text style={[styles.chipText, selected && styles.selectedText]}>
               {type}
             </Text>
@@ -63,25 +78,34 @@ export default function TypeFilter({
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 14,
+    paddingTop: 10,
+    paddingBottom: 2,
     gap: 8,
   },
   chip: {
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    borderRadius: 999,
+    minHeight: 36,
+    paddingHorizontal: 12,
+    borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#E1E3E8",
+    borderColor: "#E4E1D8",
     backgroundColor: "#FFFFFF",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 7,
   },
   allChipSelected: {
-    backgroundColor: "#20222A",
-    borderColor: "#20222A",
+    backgroundColor: "#252832",
+    borderColor: "#252832",
+  },
+  dot: {
+    width: 9,
+    height: 9,
+    borderRadius: 5,
   },
   chipText: {
-    color: "#656975",
-    fontSize: 13,
-    fontWeight: "800",
+    color: "#565A65",
+    fontSize: 12,
+    fontWeight: "900",
     textTransform: "capitalize",
   },
   selectedText: {

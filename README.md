@@ -1,130 +1,80 @@
-# Pokédex Team Builder — Expo
+# Pokédex Team Builder
 
-แอปพลิเคชัน Pokédex ที่พัฒนาด้วย Expo, React Native, TypeScript และ Expo Router  
-ข้อมูลโปเกมอนดึงจาก PokeAPI และบันทึกรายการโปรด/ทีมด้วย AsyncStorage
+แอปพลิเคชัน Pokédex พัฒนาด้วย Expo, React Native, TypeScript และ Expo Router โดยดึงข้อมูลโปเกมอนจาก PokeAPI และบันทึกรายการโปรดกับทีมโปเกมอนด้วย AsyncStorage
 
 ## ความสามารถของระบบ
 
-- ค้นหาโปเกมอนจากชื่อโดยไม่สนใจตัวพิมพ์เล็กหรือพิมพ์ใหญ่
-- รายการเปลี่ยนทันทีตามข้อความที่ค้นหา
-- แสดง Empty State เมื่อไม่พบข้อมูล
-- กดชนิดของโปเกมอนเพื่อกรองโปเกมอนชนิดเดียวกัน
-- เพิ่มหรือลบโปเกมอนที่ชื่นชอบจากหน้ารายการและหน้ารายละเอียด
-- รายการโปรดยังคงอยู่เมื่อเปลี่ยนหน้าหรือเปิดแอปใหม่
-- มีหน้า Favorites และ Empty State เมื่อยังไม่มีรายการ
+- ค้นหาโปเกมอนจากชื่อโดยไม่สนใจตัวอักษรพิมพ์เล็กหรือพิมพ์ใหญ่
+- แสดงรายการโปเกมอนตามข้อความที่ค้นหาแบบทันที
+- แสดงข้อความแจ้งเตือนเมื่อไม่พบโปเกมอน
+- กรองโปเกมอนตามชนิด เช่น Fire, Water, Ground และ Dragon
+- เพิ่มหรือลบโปเกมอนออกจากรายการโปรด
+- แสดงสถานะรายการโปรดทั้งหน้ารายการและหน้ารายละเอียด
+- บันทึกรายการโปรดไว้แม้เปลี่ยนหน้าหรือเปิดแอปใหม่
+- มีหน้าสำหรับแสดงโปเกมอนที่ชื่นชอบ
+- แสดง Empty State เมื่อยังไม่มีรายการโปรด
 - สร้างทีมโปเกมอนได้สูงสุด 6 ตัว
-- แสดงรายละเอียด ส่วนสูง น้ำหนัก Ability และ Base Stats
+- แสดงรายละเอียดโปเกมอน เช่น ชนิด ส่วนสูง น้ำหนัก Abilities และ Base Stats
 
 ## Reusable Components
 
-1. `components/PokemonCard.tsx` — แสดงโปเกมอนแต่ละตัว
-2. `components/PokemonSearchBar.tsx` — ช่องค้นหา
-3. `components/EmptyState.tsx` — แสดงกรณีไม่มีข้อมูลหรือเกิดข้อผิดพลาด
-4. `components/TypeFilter.tsx` — ตัวกรองประเภทโปเกมอน
+- `components/PokemonCard.tsx` — แสดงข้อมูลโปเกมอนในรายการ
+- `components/PokemonSearchBar.tsx` — ช่องค้นหาโปเกมอน
+- `components/EmptyState.tsx` — แสดงกรณีไม่มีข้อมูลหรือเกิดข้อผิดพลาด
+- `components/TypeFilter.tsx` — ตัวกรองโปเกมอนตามชนิด
 
-## การติดตั้ง
+## เทคโนโลยีที่ใช้
 
-### 1. สร้าง Expo Router Project
+- Expo
+- React Native
+- TypeScript
+- Expo Router
+- AsyncStorage
+- PokeAPI
+
+## การติดตั้งและเปิดใช้งาน
+
+ติดตั้งแพ็กเกจของโปรเจกต์:
 
 ```bash
-npx create-expo-app@latest PokedexTeamBuilder --template tabs
-cd PokedexTeamBuilder
+npm install
 ```
 
-### 2. ติดตั้ง AsyncStorage
-
-```bash
-npx expo install @react-native-async-storage/async-storage
-```
-
-### 3. นำ Source Code ไปวาง
-
-คัดลอกโฟลเดอร์ต่อไปนี้จากชุด Source Code นี้ ไปแทนที่หรือเพิ่มในโปรเจกต์
-
-```text
-app/
-components/
-constants/
-contexts/
-services/
-types/
-```
-
-### 4. เปิดโปรเจกต์
+เปิดโปรเจกต์ด้วย Expo:
 
 ```bash
 npx expo start
 ```
 
-หลังจากนั้นสแกน QR Code ด้วย Expo Go หรือกด `w` เพื่อเปิดบนเว็บ
+จากนั้นสแกน QR Code ด้วยแอป Expo Go หรือกด `w` เพื่อเปิดบนเว็บ
 
-## โครงสร้างไฟล์
-
-```text
-PokedexTeamBuilder/
-├── app/
-│   ├── _layout.tsx
-│   ├── (tabs)/
-│   │   ├── _layout.tsx
-│   │   ├── index.tsx
-│   │   ├── favorites.tsx
-│   │   └── team.tsx
-│   └── pokemon/
-│       └── [name].tsx
-├── components/
-│   ├── EmptyState.tsx
-│   ├── PokemonCard.tsx
-│   ├── PokemonSearchBar.tsx
-│   └── TypeFilter.tsx
-├── constants/
-│   └── typeColors.ts
-├── contexts/
-│   └── PokemonAppContext.tsx
-├── services/
-│   └── pokeapi.ts
-└── types/
-    └── pokemon.ts
-```
+> แอปต้องเชื่อมต่ออินเทอร์เน็ตเพื่อดึงข้อมูลจาก PokeAPI
 
 ## สมาชิกและหน้าที่
 
-> แก้ไขชื่อและรหัสนักศึกษาก่อนส่งงาน
-
 ### สมาชิกคนที่ 1
 
-- ชื่อ–นามสกุล: `[กรอกชื่อ]`
-- รหัสนักศึกษา: `[กรอกรหัส]`
+- ชื่อ–นามสกุล: ปภพ สุระทิพย์
+- รหัสนักศึกษา: 663450176-7
 - หน้าที่:
   - พัฒนาหน้า Pokédex
-  - ระบบค้นหาชื่อ
-  - ระบบกรองตามชนิด
+  - พัฒนาระบบค้นหาโปเกมอน
+  - พัฒนาระบบกรองโปเกมอนตามชนิด
 
 ### สมาชิกคนที่ 2
 
-- ชื่อ–นามสกุล: `[กรอกชื่อ]`
-- รหัสนักศึกษา: `[กรอกรหัส]`
+- ชื่อ–นามสกุล: ธนกร ภิรมย์กุล
+- รหัสนักศึกษา: 643450789-0
 - หน้าที่:
-  - ระบบ Favorites
-  - AsyncStorage
-  - หน้า Favorites และ Empty State
+  - พัฒนาระบบ Favorites
+  - จัดเก็บข้อมูลด้วย AsyncStorage
+  - พัฒนาหน้า Favorites และ Empty State
 
 ### สมาชิกคนที่ 3
 
-- ชื่อ–นามสกุล: `[กรอกชื่อ]`
-- รหัสนักศึกษา: `[กรอกรหัส]`
+- ชื่อ–นามสกุล: กีรติ สุวรรณภูสิทธิ์
+- รหัสนักศึกษา: 663450172-5
 - หน้าที่:
-  - หน้ารายละเอียดโปเกมอน
-  - ระบบ Team Builder
+  - พัฒนาหน้ารายละเอียดโปเกมอน
+  - พัฒนาระบบ Team Builder
   - ทดสอบระบบและจัดทำ README
-
-## Checklist ก่อนส่ง
-
-- [ ] แก้ไขชื่อสมาชิกและหน้าที่ใน README
-- [ ] ทดสอบค้นหาด้วยตัวพิมพ์เล็กและตัวพิมพ์ใหญ่
-- [ ] ทดสอบกรณีค้นหาไม่พบ
-- [ ] ทดสอบกดชนิดโปเกมอน
-- [ ] ทดสอบเพิ่มและลบ Favorites
-- [ ] ปิดและเปิดแอปใหม่เพื่อทดสอบการบันทึกข้อมูล
-- [ ] ทดสอบหน้า Favorites ตอนยังไม่มีรายการ
-- [ ] Push Source Code ขึ้น GitHub
-- [ ] ส่ง GitHub URL เข้า Classroom

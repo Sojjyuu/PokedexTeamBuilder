@@ -18,8 +18,12 @@ export default function EmptyState({
 }: EmptyStateProps) {
   return (
     <View style={styles.container}>
-      <View style={styles.iconCircle}>
-        <Ionicons name={icon} size={46} color="#E3350D" />
+      <View style={styles.ball}>
+        <View style={styles.ballTop} />
+        <View style={styles.ballLine} />
+        <View style={styles.ballCenter}>
+          <Ionicons name={icon} size={28} color="#D62828" />
+        </View>
       </View>
 
       <Text style={styles.title}>{title}</Text>
@@ -33,6 +37,7 @@ export default function EmptyState({
             pressed && styles.pressed,
           ]}
         >
+          <Ionicons name="flash" size={16} color="#302B20" />
           <Text style={styles.buttonText}>{actionLabel}</Text>
         </Pressable>
       )}
@@ -43,21 +48,47 @@ export default function EmptyState({
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    paddingVertical: 36,
+    paddingVertical: 38,
     paddingHorizontal: 22,
     alignItems: "center",
   },
-  iconCircle: {
-    width: 92,
-    height: 92,
-    marginBottom: 18,
-    borderRadius: 46,
-    backgroundColor: "#FDE9E4",
+  ball: {
+    width: 96,
+    height: 96,
+    marginBottom: 20,
+    overflow: "hidden",
+    borderRadius: 48,
+    borderWidth: 6,
+    borderColor: "#252832",
+    backgroundColor: "#FFFFFF",
+  },
+  ballTop: {
+    width: "100%",
+    height: "50%",
+    backgroundColor: "#D62828",
+  },
+  ballLine: {
+    position: "absolute",
+    top: 41,
+    width: "100%",
+    height: 8,
+    backgroundColor: "#252832",
+  },
+  ballCenter: {
+    position: "absolute",
+    top: 25,
+    left: 25,
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    borderWidth: 6,
+    borderColor: "#252832",
+    backgroundColor: "#FFFFFF",
     alignItems: "center",
     justifyContent: "center",
   },
   title: {
-    color: "#20222A",
+    color: "#252832",
     fontSize: 20,
     fontWeight: "900",
     textAlign: "center",
@@ -65,25 +96,28 @@ const styles = StyleSheet.create({
   message: {
     maxWidth: 310,
     marginTop: 8,
-    color: "#7A7E89",
+    color: "#777B85",
     fontSize: 14,
     lineHeight: 21,
     textAlign: "center",
   },
   button: {
-    marginTop: 19,
-    minWidth: 145,
+    marginTop: 20,
+    minWidth: 150,
     paddingVertical: 12,
-    paddingHorizontal: 20,
+    paddingHorizontal: 19,
     borderRadius: 14,
-    backgroundColor: "#E3350D",
+    backgroundColor: "#F7C948",
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+    gap: 7,
   },
   pressed: {
     opacity: 0.8,
   },
   buttonText: {
-    color: "#FFFFFF",
+    color: "#302B20",
     fontSize: 14,
     fontWeight: "900",
   },

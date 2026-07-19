@@ -81,7 +81,12 @@ export default function PokedexScreen() {
   if (loading) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator size="large" color="#E3350D" />
+        <PokeballSpinner />
+        <ActivityIndicator
+          size="small"
+          color="#D62828"
+          style={styles.activity}
+        />
         <Text style={styles.loadingText}>กำลังเปิด Pokédex...</Text>
       </View>
     );
@@ -113,37 +118,63 @@ export default function PokedexScreen() {
         <RefreshControl
           refreshing={refreshing}
           onRefresh={() => void loadPokemon(true)}
-          tintColor="#E3350D"
+          tintColor="#D62828"
         />
       }
       ListHeaderComponent={
         <View>
           <View style={styles.hero}>
-            <Text style={styles.eyebrow}>POKÉDEX TEAM BUILDER</Text>
-            <Text style={styles.title}>ค้นหาและสร้างทีมของคุณ</Text>
-            <Text style={styles.subtitle}>
-              แสดงโปเกมอนรุ่นที่ 1 จำนวน {pokemon.length} ตัว
+            <View style={styles.heroGlow} />
+            <View style={styles.heroBallTop} />
+            <View style={styles.heroBallLine} />
+            <View style={styles.heroBallCenter}>
+              <View style={styles.heroBallCenterInner} />
+            </View>
+
+            <View style={styles.regionBadge}>
+              <Text style={styles.regionText}>KANTO REGION</Text>
+            </View>
+
+            <Text style={styles.heroTitle}>Pokédex</Text>
+            <Text style={styles.heroSubtitle}>
+              ค้นหาโปเกมอนและสร้างทีมในฝันของคุณ
             </Text>
+
+            <View style={styles.dexCounter}>
+              <Text style={styles.dexCounterLabel}>REGISTERED</Text>
+              <Text style={styles.dexCounterValue}>
+                {String(pokemon.length).padStart(3, "0")}
+              </Text>
+            </View>
           </View>
 
-          <PokemonSearchBar
-            value={query}
-            onChangeText={setQuery}
-            onClear={() => setQuery("")}
-          />
+          <View style={styles.searchSection}>
+            <PokemonSearchBar
+              value={query}
+              onChangeText={setQuery}
+              onClear={() => setQuery("")}
+            />
 
-          <TypeFilter
-            types={availableTypes}
-            selectedType={selectedType}
-            onSelectType={setSelectedType}
-          />
+            <Text style={styles.filterTitle}>ค้นหาตามประเภท</Text>
+            <TypeFilter
+              types={availableTypes}
+              selectedType={selectedType}
+              onSelectType={setSelectedType}
+            />
+          </View>
 
           <View style={styles.resultRow}>
-            <Text style={styles.resultText}>
-              พบ {filteredPokemon.length} รายการ
-            </Text>
+            <View>
+              <Text style={styles.resultTitle}>Pokémon List</Text>
+              <Text style={styles.resultText}>
+                พบทั้งหมด {filteredPokemon.length} รายการ
+              </Text>
+            </View>
+
             {selectedType && (
-              <Text style={styles.filterText}>Type: {selectedType}</Text>
+              <View style={styles.activeFilter}>
+                <Text style={styles.activeFilterText}>{selectedType}</Text>
+              </View>
             )}
           </View>
         </View>
@@ -177,64 +208,235 @@ export default function PokedexScreen() {
   );
 }
 
+function PokeballSpinner() {
+  return (
+    <View style={styles.spinnerBall}>
+      <View style={styles.spinnerTop} />
+      <View style={styles.spinnerLine} />
+      <View style={styles.spinnerCenter}>
+        <View style={styles.spinnerCenterInner} />
+      </View>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   center: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#F7F8FC",
+    backgroundColor: "#F5F2E9",
     padding: 24,
   },
+  activity: {
+    marginTop: 18,
+  },
   loadingText: {
-    marginTop: 12,
-    color: "#666A76",
+    marginTop: 9,
+    color: "#575B65",
     fontSize: 15,
+    fontWeight: "700",
   },
   listContent: {
-    padding: 16,
-    paddingBottom: 32,
-    backgroundColor: "#F7F8FC",
+    paddingBottom: 34,
+    backgroundColor: "#F5F2E9",
     flexGrow: 1,
   },
   column: {
     gap: 12,
+    paddingHorizontal: 16,
   },
   hero: {
-    marginBottom: 16,
+    minHeight: 225,
+    paddingTop: 34,
+    paddingHorizontal: 22,
+    paddingBottom: 28,
+    overflow: "hidden",
+    backgroundColor: "#D62828",
+    borderBottomLeftRadius: 34,
+    borderBottomRightRadius: 34,
   },
-  eyebrow: {
-    color: "#E3350D",
-    fontSize: 12,
-    fontWeight: "800",
-    letterSpacing: 1.5,
+  heroGlow: {
+    position: "absolute",
+    width: 180,
+    height: 180,
+    borderRadius: 90,
+    right: -40,
+    top: -45,
+    backgroundColor: "#EF5350",
   },
-  title: {
-    marginTop: 5,
-    color: "#20222A",
-    fontSize: 27,
-    lineHeight: 34,
+  heroBallTop: {
+    position: "absolute",
+    right: -30,
+    bottom: -62,
+    width: 190,
+    height: 190,
+    borderRadius: 95,
+    backgroundColor: "#FFFFFF22",
+    borderWidth: 8,
+    borderColor: "#FFFFFF32",
+  },
+  heroBallLine: {
+    position: "absolute",
+    right: -18,
+    bottom: 27,
+    width: 185,
+    height: 13,
+    backgroundColor: "#FFFFFF35",
+  },
+  heroBallCenter: {
+    position: "absolute",
+    right: 48,
+    bottom: -3,
+    width: 74,
+    height: 74,
+    borderRadius: 37,
+    backgroundColor: "#D62828",
+    borderWidth: 10,
+    borderColor: "#FFFFFF42",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  heroBallCenterInner: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: "#FFFFFF55",
+  },
+  regionBadge: {
+    alignSelf: "flex-start",
+    paddingVertical: 6,
+    paddingHorizontal: 11,
+    borderRadius: 999,
+    backgroundColor: "#F7C948",
+  },
+  regionText: {
+    color: "#302B20",
+    fontSize: 10,
     fontWeight: "900",
+    letterSpacing: 1.1,
   },
-  subtitle: {
+  heroTitle: {
+    marginTop: 15,
+    color: "#FFFFFF",
+    fontSize: 39,
+    lineHeight: 45,
+    fontWeight: "900",
+    letterSpacing: -1,
+  },
+  heroSubtitle: {
+    width: "72%",
     marginTop: 5,
-    color: "#777B87",
+    color: "#FFEDEE",
     fontSize: 14,
-  },
-  resultRow: {
-    marginTop: 4,
-    marginBottom: 12,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  resultText: {
-    color: "#777B87",
-    fontSize: 13,
+    lineHeight: 20,
     fontWeight: "600",
   },
-  filterText: {
-    color: "#E3350D",
+  dexCounter: {
+    position: "absolute",
+    right: 23,
+    top: 34,
+    alignItems: "flex-end",
+  },
+  dexCounterLabel: {
+    color: "#FFD9D9",
+    fontSize: 9,
+    fontWeight: "900",
+    letterSpacing: 1.2,
+  },
+  dexCounterValue: {
+    color: "#FFFFFF",
+    fontSize: 31,
+    fontWeight: "900",
+  },
+  searchSection: {
+    marginTop: -18,
+    marginHorizontal: 16,
+    padding: 14,
+    borderRadius: 22,
+    backgroundColor: "#FFFFFF",
+    shadowColor: "#4A2020",
+    shadowOpacity: 0.1,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 7 },
+    elevation: 5,
+  },
+  filterTitle: {
+    marginTop: 14,
+    marginLeft: 2,
+    color: "#343742",
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: "900",
+  },
+  resultRow: {
+    paddingTop: 22,
+    paddingHorizontal: 16,
+    paddingBottom: 12,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
+  },
+  resultTitle: {
+    color: "#252832",
+    fontSize: 21,
+    fontWeight: "900",
+  },
+  resultText: {
+    marginTop: 3,
+    color: "#777B85",
+    fontSize: 12,
+    fontWeight: "600",
+  },
+  activeFilter: {
+    paddingVertical: 7,
+    paddingHorizontal: 13,
+    borderRadius: 999,
+    backgroundColor: "#252832",
+  },
+  activeFilterText: {
+    color: "#FFFFFF",
+    fontSize: 11,
+    fontWeight: "900",
     textTransform: "capitalize",
+  },
+  spinnerBall: {
+    width: 86,
+    height: 86,
+    overflow: "hidden",
+    borderRadius: 43,
+    borderWidth: 6,
+    borderColor: "#252832",
+    backgroundColor: "#FFFFFF",
+  },
+  spinnerTop: {
+    width: "100%",
+    height: "50%",
+    backgroundColor: "#D62828",
+  },
+  spinnerLine: {
+    position: "absolute",
+    top: 36,
+    width: "100%",
+    height: 8,
+    backgroundColor: "#252832",
+  },
+  spinnerCenter: {
+    position: "absolute",
+    top: 25,
+    left: 25,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    borderWidth: 6,
+    borderColor: "#252832",
+    backgroundColor: "#FFFFFF",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  spinnerCenterInner: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: "#D9D9D9",
   },
 });

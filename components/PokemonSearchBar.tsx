@@ -13,18 +13,22 @@ export default function PokemonSearchBar({
   onClear,
 }: PokemonSearchBarProps) {
   return (
-    <View style={styles.container}>
-      <Ionicons name="search-outline" size={21} color="#7B7F8A" />
+    <View style={styles.outer}>
+      <View style={styles.iconCircle}>
+        <Ionicons name="search" size={19} color="#FFFFFF" />
+      </View>
+
       <TextInput
         value={value}
         onChangeText={onChangeText}
-        placeholder="ค้นหาโปเกมอนจากชื่อ..."
-        placeholderTextColor="#A0A3AC"
+        placeholder="ค้นหาชื่อโปเกมอน..."
+        placeholderTextColor="#979AA3"
         autoCapitalize="none"
         autoCorrect={false}
         returnKeyType="search"
         style={styles.input}
       />
+
       {value.length > 0 && (
         <Pressable
           accessibilityRole="button"
@@ -32,7 +36,7 @@ export default function PokemonSearchBar({
           onPress={onClear}
           hitSlop={10}
         >
-          <Ionicons name="close-circle" size={21} color="#9A9DA6" />
+          <Ionicons name="close-circle" size={22} color="#9A9DA6" />
         </Pressable>
       )}
     </View>
@@ -40,23 +44,30 @@ export default function PokemonSearchBar({
 }
 
 const styles = StyleSheet.create({
-  container: {
+  outer: {
     height: 54,
-    paddingHorizontal: 16,
+    paddingLeft: 7,
+    paddingRight: 14,
     borderRadius: 17,
-    backgroundColor: "#FFFFFF",
+    borderWidth: 2,
+    borderColor: "#ECE8DD",
+    backgroundColor: "#FAFAF8",
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    shadowColor: "#000000",
-    shadowOpacity: 0.05,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 5 },
-    elevation: 2,
+  },
+  iconCircle: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: "#D62828",
+    alignItems: "center",
+    justifyContent: "center",
   },
   input: {
     flex: 1,
-    color: "#20222A",
+    color: "#252832",
     fontSize: 15,
+    fontWeight: "600",
   },
 });
