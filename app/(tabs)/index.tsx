@@ -25,7 +25,7 @@ export default function PokedexScreen() {
 
   const [pokemon, setPokemon] = useState<PokemonListItem[]>([]);
   const [query, setQuery] = useState("");
-  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState("");
@@ -33,9 +33,19 @@ export default function PokedexScreen() {
   useEffect(() => {
     const incomingType = Array.isArray(params.type) ? params.type[0] : params.type;
     if (incomingType) {
-      setSelectedType(incomingType.toLowerCase());
+      setSelectedTypes([incomingType.toLowerCase()]);
     }
   }, [params.type]);
+
+  const toggleType = (type: string) => {
+    setSelectedTypes((current) =>
+      current.includes(type)
+        ? current.filter((item) => item !== type)
+        : [...current, type]
+    );
+  };
+
+  const clearTypes = () => setSelectedTypes([]);
 
   const loadPokemon = async (isRefresh = false) => {
     try {
@@ -72,11 +82,12 @@ export default function PokedexScreen() {
         item.name.toLowerCase().includes(normalizedQuery);
 
       const matchesType =
-        selectedType === null || item.types.includes(selectedType);
+        selectedTypes.length === 0 ||
+        selectedTypes.some((type) => item.types.includes(type));
 
       return matchesName && matchesType;
     });
-  }, [pokemon, query, selectedType]);
+  }, [pokemon, query, selectedTypes]);
 
   if (loading) {
     return (
@@ -158,24 +169,17 @@ export default function PokedexScreen() {
             <Text style={styles.filterTitle}>ค้นหาตามประเภท</Text>
             <TypeFilter
               types={availableTypes}
-              selectedType={selectedType}
-              onSelectType={setSelectedType}
+              selectedTypes={selectedTypes}
+              onToggleType={toggleType}
+              onClear={clearTypes}
             />
           </View>
 
           <View style={styles.resultRow}>
-            <View>
-              <Text style={styles.resultTitle}>Pokémon List</Text>
-              <Text style={styles.resultText}>
-                พบทั้งหมด {filteredPokemon.length} รายการ
-              </Text>
-            </View>
-
-            {selectedType && (
-              <View style={styles.activeFilter}>
-                <Text style={styles.activeFilterText}>{selectedType}</Text>
-              </View>
-            )}
+            <Text style={styles.resultTitle}>Pokémon List</Text>
+            <Text style={styles.resultText}>
+              พบทั้งหมด {filteredPokemon.length} รายการ
+            </Text>
           </View>
         </View>
       }
@@ -185,7 +189,7 @@ export default function PokedexScreen() {
           favorite={isFavorite(item.name)}
           onPress={() => router.push(`/pokemon/${item.name}`)}
           onToggleFavorite={() => void toggleFavorite(item.name)}
-          onTypePress={setSelectedType}
+          onTypePress={(type) => setSelectedTypes([type])}
         />
       )}
       ListEmptyComponent={
@@ -200,7 +204,7 @@ export default function PokedexScreen() {
           actionLabel="ล้างตัวกรอง"
           onAction={() => {
             setQuery("");
-            setSelectedType(null);
+            clearTypes();
           }}
         />
       }
@@ -372,9 +376,6 @@ const styles = StyleSheet.create({
     paddingTop: 22,
     paddingHorizontal: 16,
     paddingBottom: 12,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
   },
   resultTitle: {
     color: "#252832",
@@ -386,18 +387,6 @@ const styles = StyleSheet.create({
     color: "#777B85",
     fontSize: 12,
     fontWeight: "600",
-  },
-  activeFilter: {
-    paddingVertical: 7,
-    paddingHorizontal: 13,
-    borderRadius: 999,
-    backgroundColor: "#252832",
-  },
-  activeFilterText: {
-    color: "#FFFFFF",
-    fontSize: 11,
-    fontWeight: "900",
-    textTransform: "capitalize",
   },
   spinnerBall: {
     width: 86,

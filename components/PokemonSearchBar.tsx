@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Pressable, StyleSheet, TextInput, View } from "react-native";
+import { useState } from "react";
+import { Platform, Pressable, StyleSheet, TextInput, View } from "react-native";
 
 type PokemonSearchBarProps = {
   value: string;
@@ -12,8 +13,10 @@ export default function PokemonSearchBar({
   onChangeText,
   onClear,
 }: PokemonSearchBarProps) {
+  const [isFocused, setIsFocused] = useState(false);
+
   return (
-    <View style={styles.outer}>
+    <View style={[styles.outer, isFocused && styles.outerFocused]}>
       <View style={styles.iconCircle}>
         <Ionicons name="search" size={19} color="#FFFFFF" />
       </View>
@@ -26,6 +29,8 @@ export default function PokemonSearchBar({
         autoCapitalize="none"
         autoCorrect={false}
         returnKeyType="search"
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
         style={styles.input}
       />
 
@@ -56,6 +61,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 10,
   },
+  outerFocused: {
+    borderColor: "#D62828",
+  },
   iconCircle: {
     width: 38,
     height: 38,
@@ -69,5 +77,9 @@ const styles = StyleSheet.create({
     color: "#252832",
     fontSize: 15,
     fontWeight: "600",
+    borderWidth: 0,
+    backgroundColor: "transparent",
+    // web only: hides the browser's default focus ring box around the input
+    ...(Platform.OS === "web" ? { outlineWidth: 0 } : {}),
   },
 });

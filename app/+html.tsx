@@ -21,6 +21,8 @@ export default function Root({ children }: { children: ReactNode }) {
 
         {/* Using raw CSS styles as an escape-hatch to ensure the background color never flickers in dark-mode. */}
         <style dangerouslySetInnerHTML={{ __html: responsiveBackground }} />
+        {/* Force-remove the browser's native focus box on text inputs (e.g. the search bar) */}
+        <style dangerouslySetInnerHTML={{ __html: noInputFocusRing }} />
         {/* Add any additional <head> elements that you want globally available on web... */}
       </head>
       <body>{children}</body>
@@ -36,4 +38,13 @@ body {
   body {
     background-color: #000;
   }
+}`;
+
+const noInputFocusRing = `
+input, input:focus, input:focus-visible, textarea, textarea:focus {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
 }`;
